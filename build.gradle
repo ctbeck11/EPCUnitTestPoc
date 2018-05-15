@@ -59,18 +59,23 @@ buildscript {
        // Fetch test results
        response = restClient.get(path: fetchTestResultsURL, query: [id: testRunId])
        def testRunResults = response.data.text
+	   println "Fetching test results..."
 
        //get a reference to our xslt
        def xslt= file("convertToJunit.xsl").text
+	   println "Fetching Junit conversion file..."
 
       // Create transformer
        def transformer = TransformerFactory.newInstance().newTransformer(new StreamSource(new StringReader(xslt)))
+	   println "Creating Junit conversion transformer..."
 
        // Set output file
        def finalXML = new FileOutputStream("testResult" + System.currentTimeMillis() + ".xml")
+	   println "Creating new test results filename..."
 
        // Perform transformation
        transformer.transform(new StreamSource(new StringReader(testRunResults)), new StreamResult(finalXML))
+	   println "Creating new XML file..."
      }
      println "System Test Completed"
  }
